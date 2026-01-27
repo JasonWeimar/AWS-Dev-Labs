@@ -1,0 +1,20 @@
+# Secrets / downloads
+.env
+.env.*
+*.pem
+*.key
+*access*key*.csv
+*AccessKey*.csv
+*credentials*
+
+# AWS local config (should never be in repo)
+.aws/
+**/.aws/
+
+# Node
+node_modules/
+dist/
+*.log
+
+# macOS
+.DS_Store
