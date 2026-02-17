@@ -1,4 +1,4 @@
-**First-Half of Lab-0:**
+**First-Section of Lab-0:**
 
 # Lab 0 — AWS SDK v3 + IAM Role Sanity
 
@@ -189,6 +189,9 @@ unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 * `docs/screenshots/04-envar-override-invalidtoken.png`
 
 ---
+
+**Second-Section (Lambda) of Lab-0:**
+
 ## Stage 5 — Lambda execution role proof (roles > keys)
 
 ### Goal
