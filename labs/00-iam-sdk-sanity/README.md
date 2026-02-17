@@ -4,7 +4,7 @@
 
 **Repo:** `aws-dva-dojo/labs/00-iam-sdk-sanity/`
 
-## What this lab demonstrates (for employers + future-me)
+## What this lab demonstrates
 
 This lab is a “credential sanity” foundation for AWS development.
 
@@ -189,6 +189,25 @@ unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 * `docs/screenshots/04-envar-override-invalidtoken.png`
 
 ---
+## Stage 5 — Lambda execution role proof (roles > keys)
+
+### Goal
+
+Run the same identity check inside AWS Lambda and prove it uses an **execution role** (temporary STS credentials), not local access keys.
+
+### What I did
+- Created a Lambda function (`lab0-identify-caller`)
+- Ran `sts:GetCallerIdentity` inside the Lambda handler
+- Verified the returned ARN and CloudWatch Logs show an **assumed-role** identity
+
+### Expected behavior (proof format)
+- Local runs show an IAM user ARN:
+  - `arn:aws:iam::<acct>:user/<name>`
+- Lambda runs show an assumed-role ARN:
+  - `arn:aws:sts::<acct>:assumed-role/<LambdaExecutionRole>/<session>`
+
+
+---
 
 # Credential chain note (short + important)
 
@@ -252,7 +271,14 @@ All screenshots live in: `docs/screenshots/`
 ### 4) Env var override trap
 ![Env var override InvalidClientTokenId](docs/screenshots/04-envar-override-invalidtoken.png)
 
-*(Future stage: Lambda role proof will add CloudWatch Logs + Lambda execution role screenshots.)*
+### 5) Lambda execution role proof
+![Lambda execution role](docs/screenshots/05-lambda-config-execution-role.png)
+
+### 6) Lambda test output + logs show assumed-role ARN
+![Lambda test](docs/screenshots/06-lambda-test-assumedrole-logs.png)
+
+### 7) CloudWatch log stream shows assumed-role ARN
+![CloudWatch log](docs/screenshots/07-cloudwatch-logstream-assumedrole.png)
 
 ---
 
