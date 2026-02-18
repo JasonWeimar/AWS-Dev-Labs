@@ -45,7 +45,7 @@ ___
 * “I validated behavior with CloudWatch logs and DLQ evidence.”
 
 ___
-# Architecture
+## Architecture
 Producer (CLI / Node script)
 |
 v
