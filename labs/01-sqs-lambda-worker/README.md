@@ -45,6 +45,19 @@ ___
 * “I validated behavior with CloudWatch logs and DLQ evidence.”
 
 ___
+# Architecture
+Producer (CLI / Node script)
+|
+v
+SQS Source Queue (lab01-worker-queue)
+|
+| (Lambda event source mapping polls in batches)
+v
+Lambda Worker (lab01-sqs-worker)
+|
+| after repeated failures (maxReceiveCount=3)
+v
+DLQ (lab01-worker-dlq)
 
 ## Screenshot Index
 All screenshots live in: docs/screenshots/
