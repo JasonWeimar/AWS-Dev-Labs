@@ -45,7 +45,9 @@ ___
 * “I validated behavior with CloudWatch logs and DLQ evidence.”
 
 ___
-## Architecture
+
+Architecture
+
 Producer (CLI / Node script)
 |
 v
@@ -58,6 +60,29 @@ Lambda Worker (lab01-sqs-worker)
 | after repeated failures (maxReceiveCount=3)
 v
 DLQ (lab01-worker-dlq)
+
+
+---
+
+## Repo layout
+
+docs/
+architecture/
+diagram.txt
+screenshots/
+infra/
+lambda-sqs-policy.json
+lambda-trust.json
+notes.md
+src/
+handlers/
+worker.js
+scripts/
+send-test-messages.js
+lab01-worker.zip
+README.md
+
+___
 
 ## Screenshot Index
 All screenshots live in: docs/screenshots/
