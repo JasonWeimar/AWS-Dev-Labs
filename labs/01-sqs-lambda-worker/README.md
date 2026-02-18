@@ -95,7 +95,7 @@ All screenshots live in: docs/screenshots/
 
 **10a) Lambda SQS trigger configuration**
 
-![Lambda SQS trigger configuration](docs/screenshots/10a-lambda-sqs-triggerr.png)
+![Lambda SQS trigger configuration](docs/screenshots/10a-lambda-sqs-trigger.png)
 
 **10b) CLI event source mapping proof**
 
