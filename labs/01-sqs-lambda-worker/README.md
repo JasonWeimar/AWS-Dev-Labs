@@ -51,7 +51,7 @@ All screenshots live in: docs/screenshots/
 
 **1a) SQS DLQ configuration**
 
-![SQS DLQ configuration](docs/screenshots/01-sqs-dlq-configuration.png)
+![SQS DLQ configuration](docs/screenshots/01a-sqs-dlq-configuration.png)
 
 **1b) SQS redrive policy with DLQ association**
 
@@ -81,33 +81,30 @@ All screenshots live in: docs/screenshots/
 
 ![Lambda runtime + handler configuration](docs/screenshots/07-lambda-config-runtime-handler.png)
 
-**8) Lambda execution role permissions for CloudWatch**
+**8a) Lambda execution role permissions for CloudWatch**
 
 ![Lambda execution role permissions for CloudWatch](docs/screenshots/08a-lambda-execution-role-cloudwatch.png)
 
-**10) Lambda execution role permissions for SQS**
+**8b) Lambda execution role permissions for SQS**
 
+![Lambda execution role permissions for SQS](docs/screenshots/08b-lambda-execution-role-sqs.png)
 
+**9) Lambda worker code**
 
-**11) Lambda worker code**
+![Lambda worker code](docs/screenshots/09-lambda-code-worker.png)
 
+**10a) Lambda SQS trigger configuration**
 
+![Lambda SQS trigger configuration](docs/screenshots/10a-lambda-sqs-triggerr.png)
 
-**12) Lambda SQS trigger configuration**
+**10b) CLI event source mapping proof**
 
+![CLI event source mapping proof](docs/screenshots/10b-cli-event-source-mapping.png)
 
+**11) CloudWatch logs showing OK + fail + retry**
 
-**13) CLI event source mapping proof**
+![CloudWatch logs showing OK + fail + retry](docs/screenshots/11-cloudwatch-logs-ok-fail-retry.png)
 
+**12) DLQ message body (poison message)**
 
-
-**14) CloudWatch logs showing OK + fail + retry**
-
-
-
-**15) DLQ message body (poison message)**
-
-
-
-
-
+![DLQ message body (poison message)](docs/screenshots/12-dlq-message-fail-body.png)
