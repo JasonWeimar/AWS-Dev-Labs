@@ -46,42 +46,13 @@ ___
 
 ___
 
-Architecture
+Architecture (mental model)
 
-Producer (CLI / Node script)
-|
-v
-SQS Source Queue (lab01-worker-queue)
-|
-| (Lambda event source mapping polls in batches)
-v
-Lambda Worker (lab01-sqs-worker)
-|
-| after repeated failures (maxReceiveCount=3)
-v
-DLQ (lab01-worker-dlq)
-
-
----
-
-## Repo layout
-
-docs/
-architecture/
-diagram.txt
-screenshots/
-infra/
-lambda-sqs-policy.json
-lambda-trust.json
-notes.md
-src/
-handlers/
-worker.js
-scripts/
-send-test-messages.js
-lab01-worker.zip
-README.md
-
+Producer ---> [SQS Source Queue] ---> (Lambda polls in batches) ---> [Lambda Worker]
+                        |
+                        | after maxReceiveCount failures
+                        v
+                      [DLQ]
 ___
 
 ## Screenshot Index
