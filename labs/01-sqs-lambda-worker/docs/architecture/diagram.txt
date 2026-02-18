@@ -1,0 +1,5 @@
+[SQS Source Queue] --(event source mapping; batch)--> [Lambda Worker]
+        |                                                  |
+        | (after maxReceiveCount)                           | logs
+        v                                                  v
+      [DLQ]                                           [CloudWatch Logs]
