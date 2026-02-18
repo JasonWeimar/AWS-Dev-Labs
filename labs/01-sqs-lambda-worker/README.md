@@ -49,41 +49,41 @@ ___
 ## Screenshot Index
 All screenshots live in: docs/screenshots/
 
-**1) SQS DLQ configuration**
+**1a) SQS DLQ configuration**
 
+![SQS DLQ configuration](docs/screenshots/01-sqs-dlq-configuration.png)
 
+**1b) SQS redrive policy with DLQ association**
 
-**2) SQS redrive policy with DLQ association**
+![SQS redrive policy with DLQ association](docs/screenshots/01b-sqs-redrive-policy-with-dlq-association.png)
 
+**2) IAM role permissions**
 
+![IAM role permissions](docs/screenshots/02-iam-role-permissions.png)
 
-**3) IAM role permissions**
+**3) IAM inline policy scoped to queue ARN**
 
+![IAM inline policy scoped to queue ARN](docs/screenshots/03-iam-inline-policy-queue-arn.png)
 
+**4) IAM trust policy (Lambda assumes role)**
 
-**4) IAM inline policy scoped to queue ARN**
+![IAM trust policy (Lambda assumes role)](docs/screenshots/04-iam-trust-policy.png)
 
+**5) Lambda overview**
 
+![Lambda overview](docs/screenshots/05-lambda-overview.png)
 
-**5) IAM trust policy (Lambda assumes role)**
+**6) Lambda overview details**
 
+![Lambda overview details](docs/screenshots/06-lambda-overview-details.png)
 
+**7) Lambda runtime + handler configuration**
 
-**6) Lambda overview**
+![Lambda runtime + handler configuration](docs/screenshots/07-lambda-config-runtime-handler.png)
 
+**8) Lambda execution role permissions for CloudWatch**
 
-
-**7) Lambda overview details**
-
-
-
-**8) Lambda runtime + handler configuration**
-
-
-
-**9) Lambda execution role permissions for CloudWatch**
-
-
+![Lambda execution role permissions for CloudWatch](docs/screenshots/08a-lambda-execution-role-cloudwatch.png)
 
 **10) Lambda execution role permissions for SQS**
 
