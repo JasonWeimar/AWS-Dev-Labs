@@ -21,6 +21,7 @@ If you’re a hiring manager skimming: this repo is designed to prove I can buil
 - Partial batch failure handling (ReportBatchItemFailures)
 - Least privilege IAM (queue ARN scoping)
 - Validation via logs + evidence screenshots
+- Operational alerting: CloudWatch alarm on DLQ visible messages (≥ 1) notifying an SNS email topic (lab01-dlq-alerts) so poison messages trigger an actionable alert.
 
 **Core AWS services**
 - SQS (source queue + DLQ)
@@ -121,3 +122,7 @@ All screenshots live in: docs/screenshots/
 **12) DLQ message body (poison message)**
 
 ![DLQ message body (poison message)](docs/screenshots/12-dlq-message-fail-body.png)
+
+**13) DLQ Alarm (SNS topic + email subscription notifications)**
+
+![DLQ Alarm (SNS topic + email subscription notifications)](docs/screenshots/13-dlq-alarm.png)
