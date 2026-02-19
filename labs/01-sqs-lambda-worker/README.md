@@ -123,6 +123,10 @@ All screenshots live in: docs/screenshots/
 
 ![DLQ message body (poison message)](docs/screenshots/12-dlq-message-fail-body.png)
 
-**13) DLQ Alarm (SNS topic + email subscription notifications)**
+**13a) DLQ Alarm (SNS topic + email subscription notifications)**
 
-![DLQ Alarm (SNS topic + email subscription notifications)](docs/screenshots/13-dlq-alarm.png)
+![DLQ Alarm (SNS topic + email subscription notifications)](docs/screenshots/13a-dlq-alarm.png)
+
+**13b) DLQ Alarm|SNS Notification (email)**
+
+![DLQ Alarm|SNS Notification (email)](docs/screenshots/13b-sns-email-alert-dlq.png)
