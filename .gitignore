@@ -8,3 +8,13 @@
 # VS Code
 .vscode/
 **/.vscode/
+.DS_Store
+**/.DS_Store
+
+# VS Code
+.vscode/
+**/.vscode/
+
+# Node
+node_modules/
+**/node_modules/
