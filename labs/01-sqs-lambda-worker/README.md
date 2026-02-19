@@ -38,15 +38,19 @@ If you’re a hiring manager skimming: this repo is designed to prove I can buil
 
 ___
 # Interview talking points
-* “I used SQS to buffer work and Lambda to auto-scale consumption.”
-* “I configured a DLQ so poison messages don’t block throughput.”
-* “I enabled partial batch failures so only failed items retry.”
-* “IAM is least privilege: SQS actions scoped to the queue ARN + CloudWatch logs.”
-* “I validated behavior with CloudWatch logs and DLQ evidence.”
+* “I used SQS to buffer work and Lambda to auto-scale consumption, keeping the producer decoupled.”
+
+* “I configured a DLQ so poison messages don’t block throughput, and I can inspect failures safely.”
+
+* “I enabled partial batch failure so only failed messages retry — this reduces cost and avoids reprocessing successes.”
+
+* “My IAM policy is least-privilege: SQS access scoped to a specific queue ARN plus CloudWatch logs.”
+
+* “I validated behavior with CloudWatch logs and DLQ message evidence.”
 
 ___
 
-Architecture (mental model)
+## Architecture (mental model)
 
 Producer ---> [SQS Source Queue] ---> (Lambda polls in batches) ---> [Lambda Worker]
                         |
