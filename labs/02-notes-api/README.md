@@ -50,6 +50,8 @@ Single-table pattern:
 
 ## Repo structure
 
+Repo structure
+
 ```text
 02-notes-api/
   src/
@@ -66,8 +68,9 @@ Single-table pattern:
     screenshots/
       (see Screenshot Index below)
   package.json
+```
 
-Screenshot Index
+## Screenshot Index
 
 All screenshots live in: `docs/screenshots/`
 
@@ -113,7 +116,8 @@ All screenshots live in: `docs/screenshots/`
 
 ### **21) Get After Delete - 404 (After delete, Get-by-id returns 404 Not Found)**
 
-Exam cues (DVA-C02)
+
+## Exam cues (DVA-C02)
 
 * **API Gateway (HTTP API)** uses Lambda proxy integration; event shape is HTTP API v2 (`requestContext.http.method/path`)
 
