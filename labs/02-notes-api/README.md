@@ -208,13 +208,11 @@ All screenshots live in: docs/screenshots/
 
 ## Cleanup (avoid ongoing costs/clutter)
 
-> DynamoDB on-demand and Lambda cost is typically tiny for labs, but cleanup keeps your console tidy.
-
 * Delete API Gateway HTTP API
 
-* Delete Lambda function
+* (optional) Delete Lambda function
 
-* Delete IAM role + inline policy
+* (optional) Delete IAM role + inline policy
 
 * Delete DynamoDB table
 
