@@ -101,6 +101,7 @@ Screenshot Index
 All screenshots live in: docs/screenshots/
 
 01) DynamoDB Table Overview (Table created with PK/SK schema and On-Demand billing mode for serverless scaling)
+![DynamoDB Table Overview (Table created with PK/SK schema and On-Demand billing mode for serverless scaling)](01-dynamodb-table-overview.png)
 
 02) Lambda Handler Routing (Single handler reads HTTP method/path and routes requests to the correct CRUD branch)
 
