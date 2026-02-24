@@ -1,56 +1,66 @@
-**First-Section of Lab-0:**
+# Lab-00 | **~README~**
+#DevAssociateLab
 
-# Lab 0 — AWS SDK v3 + IAM Role Sanity
+___
 
-**Repo:** `aws-dva-dojo/labs/00-iam-sdk-sanity/`
+## Lab 00 — AWS SDK v3 + IAM Role Sanity
 
-## What this lab demonstrates
-
-This lab is a “credential sanity” foundation for AWS development.
-
-By the end, I can confidently answer:
-
-1. **Who am I authenticated as right now?**
-
-2. **Where did those credentials come from (profile vs env vars vs role)?**
-
-3. **How do I prove it inside code using AWS SDK v3?**
-
-⠀
-This is one of the most common real-world AWS debugging skills:
-
-> *“I’m using the wrong credentials.”*
+This warmup lab builds “credential instincts”: proving **who AWS thinks you are**, **where credentials are coming from**, and **why roles (temporary creds) beat long-lived access keys**. This becomes the baseline workflow you’ll reuse in every AWS lab and real project.
 
 ---
 
-## Quick results (evidence)
+## What this lab demonstrates
 
-* **CLI identity proof:** `aws sts get-caller-identity` confirms my AWS principal
+### Engineering behaviors
 
-* **Credential source proof:** `aws configure list` shows *where* creds + region are resolved from
+- **Identity verification as a workflow:** Use `sts:GetCallerIdentity` as a repeatable “who am I?” check before creating resources.
+- **Credential source awareness:** Confirm where credentials/region are resolved from (`AWS_PROFILE`, shared config, env vars).
+- **Provider chain trap-proofing:** Demonstrate how env vars override profile creds and can cause “wrong identity / wrong account” issues.
+- **Roles > keys (compute best practice):** Prove Lambda uses an **execution role** (temporary STS credentials) instead of local keys.
+- **Evidence-driven debugging:** Use CloudWatch Logs and screenshots to document identity and execution context.
 
-* **SDK identity proof:** Node + AWS SDK v3 prints the same identity as the CLI (when using profile)
+### Core AWS services / concepts
 
-* **Provider chain trap proof:** intentionally invalid env creds cause expected auth failure (`InvalidClientTokenId`)
+- **STS** (`GetCallerIdentity`) — identity thermometer
+- **IAM** (users vs roles, trust vs permissions)
+- **AWS SDK v3** (credential provider chain)
+- **Lambda** (execution role identity)
+- **CloudWatch Logs** (runtime proof)
+
+---
+
+## Why this matters in real apps
+
+Most AWS “it doesn’t work” moments are actually **credential or permission problems**, not code problems:
+- Wrong profile / wrong account
+- Env vars overriding expected creds
+- Services running under a role (Lambda/ECS/EC2) that doesn’t match local identity
+
+If you can answer quickly:
+1) **Who am I right now?**
+2) **Where did creds come from?**
+3) **What role is the service assuming?**
+
+…you debug faster than 90% of people.
 
 ---
 
 ## Lab goal
 
-Prove an understanding of how AWS credentials flow locally (**AWS_PROFILE vs environment variables**) and why **IAM roles + temporary credentials** are preferred for AWS services (Lambda/EC2/ECS) over long-lived access keys.
+Prove the end-to-end credential flow for AWS CLI + AWS SDK v3:
+- Local CLI identity
+- Local SDK identity (matches CLI when profile is consistent)
+- Env var override behavior (safe failure)
+- Lambda execution role identity (assumed-role ARN proof)
 
 ---
 
 ## What I built
 
-**`src/identifyCaller.js`**
-A minimal Node.js script using **AWS SDK v3** that calls **STS `GetCallerIdentity`** and prints:
-
-* `Account`
-
-* `UserId`
-
-* `Arn`
+- `src/identifyCaller.js` — minimal Node script using AWS SDK v3 that calls **STS `GetCallerIdentity`** and prints:
+  - `Account`
+  - `UserId`
+  - `Arn`
 
 This becomes a reusable “identity thermometer” for every future lab.
 
@@ -58,239 +68,105 @@ This becomes a reusable “identity thermometer” for every future lab.
 
 ## Prerequisites
 
-* AWS CLI configured with a profile named **`lab-dev`**
-
-* Node.js + dependencies installed (`npm install`)
-
-* Never store secrets in this repo (credentials stay in `~/.aws/*`)
+- AWS CLI configured with a profile named `lab-dev`
+- Node.js installed + dependencies installed (`npm install`)
+- **Never** store credentials in the repo (keys remain in `~/.aws/*`)
 
 ---
 
-# Lab walkthrough (stages)
+## Redaction rules (security hygiene)
 
-## Stage 1 — CLI identity sanity (baseline)
+✅ OK to show:
+- AWS Account ID
+- ARN
+- Request IDs
 
-### Goal
+❌ Never include:
+- Access keys / secret keys
+- Session tokens
+- `.env` secrets
+- `~/.aws/credentials` contents
 
-Confirm the terminal can call AWS and verify the active identity.
+---
 
-### Command
+## Screenshot Index
 
-```
+All screenshots live in: `docs/screenshots/`
+
+**01) CLI identity baseline (STS GetCallerIdentity confirms the active principal for this terminal session)**  
+![CLI GetCallerIdentity](docs/screenshots/01-cli-getcalleridentity-profile.png)
+
+**02) Credential source + region proof (aws configure list shows which files/inputs resolved access keys + region for the profile)**  
+![CLI Configure List](docs/screenshots/02-cli-configure-list.png)
+
+**03) SDK v3 identity sanity (Node + AWS SDK v3 resolves credentials via the provider chain and matches the CLI identity when using lab-dev)**  
+![Node SDK GetCallerIdentity](docs/screenshots/03-node-sdk-getcalleridentity.png)
+
+**04) Env var override trap (Intentionally invalid env credentials demonstrate env vars override profile resolution and can cause InvalidClientTokenId)**  
+![Env var override InvalidClientTokenId](docs/screenshots/04-envar-override-invalidtoken.png)
+
+**05) Lambda execution role proof (Lambda configuration shows the execution role used at runtime instead of local credentials)**  
+![Lambda execution role](docs/screenshots/05-lambda-config-execution-role.png)
+
+**06) Lambda test output + logs show assumed-role ARN (Test invocation proves Lambda runs as an assumed-role identity via STS temporary credentials)**  
+![Lambda test](docs/screenshots/06-lambda-test-assumedrole-logs.png)
+
+**07) CloudWatch log stream shows assumed-role ARN (CloudWatch Logs is the source-of-truth proof of the runtime identity)**  
+![CloudWatch log](docs/screenshots/07-cloudwatch-logstream-assumedrole.png)
+
+---
+
+## Quick run commands (repeatable)
+
+### CLI identity check
+```bash
 AWS_PROFILE=lab-dev aws sts get-caller-identity
 ```
 
-### Expected output (example)
-
-```
-{
-  "Account": "148761680757",
-  "Arn": "arn:aws:iam::148761680757:user/Jason",
-  "UserId": "..."
-}
-```
-
-### Screenshot evidence
-
-* `docs/screenshots/01-cli-getcalleridentity-profile.png`
-
----
-
-## Stage 2 — Credential source + region proof (lab hygiene)
-
-### Goal
-
-Prove where the CLI is loading credentials + region from (profile, shared credentials file, config file).
-
-### Command
+### Credential source check
 
 ```
 AWS_PROFILE=lab-dev aws configure list
 ```
 
-### What I’m looking for
-
-* `profile` is `lab-dev`
-
-* `access_key` / `secret_key` source is `shared-credentials-file`
-
-* `region` source is `~/.aws/config`
-
-### Screenshot evidence
-
-* `docs/screenshots/02-cli-configure-list.png`
-
----
-
-## Stage 3 — SDK v3 identity sanity (code matches CLI)
-
-### Goal
-
-Prove AWS SDK v3 uses the same credentials as the CLI when run under the same profile.
-
-### Command
+### SDK identity check (local)
 
 ```
 AWS_PROFILE=lab-dev npm run dev
 ```
 
-### Expected output (example)
+### Env var override test (safe failure)
+
+> Uses intentionally invalid values. Never commit real secrets.
 
 ```
-CallerIdentity: {
-  Account: '148761680757',
-  UserId: '...',
-  Arn: 'arn:aws:iam::148761680757:user/Jason'
-}
+unset AWS_PROFILE AWS_DEFAULT_PROFILEexport AWS_ACCESS_KEY_ID="FAKEEXAMPLE"export AWS_SECRET_ACCESS_KEY="fake"export AWS_SESSION_TOKEN="fake"npm run dev
 ```
 
-### Screenshot evidence
-
-* `docs/screenshots/03-node-sdk-getcalleridentity.png`
-
----
-
-## Stage 4 — Credential provider chain trap (env vars override / mislead)
-
-### Goal
-
-Demonstrate that environment variables can cause the SDK to authenticate using **different** credentials than expected (a common source of “wrong account / wrong permissions” bugs).
-
-### Why this matters
-
-The AWS CLI/SDK searches for credentials in a priority order. If conflicting sources exist (profile + env vars), behavior can become confusing.
-
-### Commands (safe test using intentionally invalid env creds)
-
-```
-unset AWS_PROFILE AWS_DEFAULT_PROFILE
-
-export AWS_ACCESS_KEY_ID="FAKEEXAMPLE"
-export AWS_SECRET_ACCESS_KEY="fake"
-export AWS_SESSION_TOKEN="fake"
-
-npm run dev
-```
-
-### Expected output
-
-```
-InvalidClientTokenId: The security token included in the request is invalid.
-```
-
-### Cleanup
+Cleanup:
 
 ```
 unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 ```
 
-### Screenshot evidence
-
-* `docs/screenshots/04-envar-override-invalidtoken.png`
-
 ---
 
-**Second-Section (Lambda) of Lab-0:**
+## Key takeaways
 
-## Stage 5 — Lambda execution role proof (roles > keys)
+* I can prove AWS identity from CLI and code using **STS GetCallerIdentity**
 
-### Goal
+* I understand the **credential provider chain** and how env vars can override profiles
 
-Run the same identity check inside AWS Lambda and prove it uses an **execution role** (temporary STS credentials), not local access keys.
+* I can prove Lambda uses an **execution role** (assumed-role ARN) and temporary STS creds
 
-### What I did
-- Created a Lambda function (`lab0-identify-caller`)
-- Ran `sts:GetCallerIdentity` inside the Lambda handler
-- Verified the returned ARN and CloudWatch Logs show an **assumed-role** identity
+* I can document and reproduce credential bugs safely without leaking secrets
 
-### Expected behavior (proof format)
-- Local runs show an IAM user ARN:
-  - `arn:aws:iam::<acct>:user/<name>`
-- Lambda runs show an assumed-role ARN:
-  - `arn:aws:sts::<acct>:assumed-role/<LambdaExecutionRole>/<session>`
+___
 
+## Exam cues (DVA-C02)
 
----
+- **Credential provider chain precedence:** Environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`) can override profiles (`AWS_PROFILE`) and cause “wrong identity” or `InvalidClientTokenId`—always sanity check with `sts:GetCallerIdentity`.
 
-# Credential chain note (short + important)
+- **Roles = STS temporary credentials:** AWS compute (Lambda/ECS/EC2) should use IAM roles; the runtime obtains **temporary STS creds** automatically. Temporary creds require a **session token**—missing `AWS_SESSION_TOKEN` is a common failure mode.
 
-### What `AWS_PROFILE=lab-dev` does
-
-When I run:
-
-```
-AWS_PROFILE=lab-dev npm run dev
-```
-
-I’m setting an environment variable for that command that tells the AWS CLI/SDK:
-
-> “Load credentials/config from the profile named `lab-dev`.”
-
-Those settings live locally:
-
-* `~/.aws/credentials` → access keys
-
-* `~/.aws/config` → region/output defaults
-
-They are **never stored in this repo**, which keeps the project safe and portable.
-
----
-
-# Redaction rules (security hygiene)
-
-✅ OK to show:
-
-* AWS **Account ID**
-
-* **ARN**
-
-* Request IDs
-
-❌ Never include:
-
-* Access keys / secret keys
-
-* Session tokens
-
-* `.env` secrets
-
-* `~/.aws/credentials` contents
-
----
-
-# Screenshots index
-
-All screenshots live in: `docs/screenshots/`
-
-### 1) CLI identity baseline
-![CLI GetCallerIdentity](docs/screenshots/01-cli-getcalleridentity-profile.png)
-
-### 2) Credential source + region proof
-![CLI Configure List](docs/screenshots/02-cli-configure-list.png)
-
-### 3) SDK v3 identity sanity
-![Node SDK GetCallerIdentity](docs/screenshots/03-node-sdk-getcalleridentity.png)
-
-### 4) Env var override trap
-![Env var override InvalidClientTokenId](docs/screenshots/04-envar-override-invalidtoken.png)
-
-### 5) Lambda execution role proof
-![Lambda execution role](docs/screenshots/05-lambda-config-execution-role.png)
-
-### 6) Lambda test output + logs show assumed-role ARN
-![Lambda test](docs/screenshots/06-lambda-test-assumedrole-logs.png)
-
-### 7) CloudWatch log stream shows assumed-role ARN
-![CloudWatch log](docs/screenshots/07-cloudwatch-logstream-assumedrole.png)
-
----
-
-# Key takeaways (what this lab proves)
-
-* I can verify AWS identity from CLI using **STS `GetCallerIdentity`**
-
-* I can verify AWS identity from code using **AWS SDK v3**
-
-* I understand that **credential source precedence** can cause “wrong identity” bugs
-
-* I can intentionally reproduce and resolve those issues (clean environment → predictable results)
+- **Assumed-role ARN proof:** When running in Lambda, `GetCallerIdentity` returns an `arn:aws:sts::...:assumed-role/...` ARN (not an IAM user ARN). If you still see a user ARN in a service context, you’re likely using local/static creds by mistake.
