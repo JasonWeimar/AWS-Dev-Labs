@@ -106,62 +106,83 @@ All screenshots live in: docs/screenshots/
 
 02) Lambda Handler Routing (Single handler reads HTTP method/path and routes requests to the correct CRUD branch)
 
+![Lambda Handler Routing (Single handler reads HTTP method/path and routes requests to the correct CRUD branch)](docs/screenshots/02-lambda-handler-routing.png)
 
 03) Lambda Endpoint Routing (CRUD endpoints implemented in one Lambda with correct status codes and route fallback behavior)
 
+![Lambda Endpoint Routing (CRUD endpoints implemented in one Lambda with correct status codes and route fallback behavior)](docs/screenshots/03-lambda-endpoint-routing.png)
 
 04) DynamoDB Persistence Pattern (PK/SK model + conditional writes + Query pattern for fast reads without scans)
 
+![DynamoDB Persistence Pattern (PK/SK model + conditional writes + Query pattern for fast reads without scans)](docs/screenshots/04-dynamodb-presistence-pattern.png)
 
 05) DynamoDB Client Wrapper (Centralized DynamoDB DocumentClient setup for reuse and safer marshalling behavior)
 
+![DynamoDB Client Wrapper (Centralized DynamoDB DocumentClient setup for reuse and safer marshalling behavior)](docs/screenshots/05-ddb-client-wrapper.png)
 
 06) Lambda Config Proof - CLI (CLI verification of runtime, handler, role, and TABLE_NAME environment variable)
 
+![Lambda Config Proof - CLI (CLI verification of runtime, handler, role, and TABLE_NAME environment variable)](docs/screenshots/06-lambda-config-proof-cli.png)
 
 07) IAM Role Permissions (Execution role includes CloudWatch logging and DynamoDB permissions scoped to the table ARN)
 
+![IAM Role Permissions (Execution role includes CloudWatch logging and DynamoDB permissions scoped to the table ARN)](docs/screenshots/07-iam-role-permissions.png)
 
 08) Lambda Overview (Lambda function deployed and ready to be invoked by API Gateway)
 
+![Lambda Overview (Lambda function deployed and ready to be invoked by API Gateway)](docs/screenshots/08-lambda-overview.png)
 
 09) Lambda Config - Env/Runtime/Handler (Runtime + handler wiring confirmed and TABLE_NAME environment variable set)
 
+![Lambda Config - Env/Runtime/Handler (Runtime + handler wiring confirmed and TABLE_NAME environment variable set)](docs/screenshots/09-lambda-config-env-runtime-handler.png)
 
 10) API Gateway Routes - CLI (CLI proof that HTTP routes exist and map to the Lambda integration)
 
+![API Gateway Routes - CLI (CLI proof that HTTP routes exist and map to the Lambda integration)](docs/screenshots/10-api-gateway-routes-cli.png)
 
 11) API Gateway Routes (HTTP API routes configured for Notes CRUD endpoints)
 
+![API Gateway Routes (HTTP API routes configured for Notes CRUD endpoints)](docs/screenshots/11-api-gateway-routes.png)
 
 12) API Gateway Integration (Lambda proxy integration configured using payload format v2.0)
 
+![API Gateway Integration (Lambda proxy integration configured using payload format v2.0)](docs/screenshots/12-api-gateway-integration.png)
 
 13) API Gateway Stage - $default (Auto-deployed default stage used to serve the live API endpoint)
 
+![API Gateway Stage - $default (Auto-deployed default stage used to serve the live API endpoint)](docs/screenshots/13-api-gateway-stage-default.png)
 
 14) Create Note - 201 (End-to-end create: API Gateway → Lambda → DynamoDB returns 201 + created note JSON)
 
+![Create Note - 201 (End-to-end create: API Gateway → Lambda → DynamoDB returns 201 + created note JSON)](docs/screenshots/14-curl-create-note-201.png)
 
 15) Get Note (Get-by-id returns the persisted item using PK/SK key lookup)
 
+![Get Note (Get-by-id returns the persisted item using PK/SK key lookup)](docs/screenshots/15-curl-get-note.png)
 
 16) List Notes (Query-based list returns items under PK=NOTE without scanning the table)
 
+![List Notes (Query-based list returns items under PK=NOTE without scanning the table)](docs/screenshots/16-curl-list-notes.png)
 
 17) Update Note (Update uses conditional expressions to ensure item exists and returns updated attributes)
 
+![Update Note (Update uses conditional expressions to ensure item exists and returns updated attributes))](docs/screenshots/17-curl-update-note.png)
 
 18) DynamoDB Item Proof (Console proof of PK/SK + attributes after create/update)
 
+![DynamoDB Item Proof (Console proof of PK/SK + attributes after create/update)](docs/screenshots/18-dynamodb-item-proof.png)
 
 19) CloudWatch Logs Invocations (Runtime proof of Lambda invocation lifecycle during API requests)
 
+![CloudWatch Logs Invocations (Runtime proof of Lambda invocation lifecycle during API requests)](docs/screenshots/19-cloudwatch-logs-invocations.png)
 
 20) Delete Note - 204 (Delete endpoint returns 204 No Content on successful delete)
 
+![Delete Note - 204 (Delete endpoint returns 204 No Content on successful delete)](docs/screenshots/20-curl-delete-note-204.png)
 
 21) Get After Delete - 404 (After delete, Get-by-id returns 404 Not Found)
+
+![Get After Delete - 404 (After delete, Get-by-id returns 404 Not Found)](docs/screenshots/21-curl-get-after-delete-404.png)
 
 ## Exam cues (DVA-C02)
 
