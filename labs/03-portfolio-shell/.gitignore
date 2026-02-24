@@ -3,7 +3,7 @@
 # ----------------------------
 .env
 .env.*
-!.env.lab02
+!.env.lab03
 
 # Keys / certs / exports
 *.pem
