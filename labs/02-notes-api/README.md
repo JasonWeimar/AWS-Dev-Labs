@@ -1,3 +1,56 @@
+Lab 02 — Notes API (API Gateway HTTP API + Lambda + DynamoDB)
+
+A serverless CRUD backend that exposes a small Notes API through **API Gateway (HTTP API)**, runs business logic in **AWS Lambda (Node.js 20)**, and persists data in **DynamoDB** using a simple **PK/SK single-table pattern** with safe conditional writes.
+
+---
+
+## What this lab demonstrates
+
+- Building a real CRUD-style API using **API Gateway HTTP API (v2)** and **Lambda proxy integration**
+- Implementing backend routing and response behavior in a single Lambda handler (status codes, validation, 404s)
+- Modeling data in DynamoDB with **PK/SK** and using **Query** patterns (no scans)
+- Using **conditional expressions** (`attribute_exists` / `attribute_not_exists`) for safe create/update/delete
+- Scoping IAM permissions to the **exact DynamoDB table ARN** (least privilege)
+- Proving runtime behavior via **CloudWatch Logs** and end-to-end **curl** tests
+
+---
+
+## Architecture (at a glance)
+
+**Flow:** Client → API Gateway (HTTP API) → Lambda → DynamoDB
+
+![Architecture at a glance](docs/architecture/architecture-at-a-glance.png)
+
+---
+
+## API Endpoints
+
+| Method | Path | Purpose | Expected Status |
+|---|---|---|---|
+| POST | `/notes` | Create a note | 201 |
+| GET | `/notes` | List notes | 200 |
+| GET | `/notes/{noteId}` | Get a note by id | 200 / 404 |
+| PUT | `/notes/{noteId}` | Update note fields | 200 / 404 |
+| DELETE | `/notes/{noteId}` | Delete a note | 204 / 404 |
+
+---
+
+## Data model (DynamoDB)
+
+Single-table pattern:
+
+- `PK = "NOTE"`
+- `SK = "NOTE#<noteId>"`
+
+**Why this works well:**
+- List notes is a fast **Query**: `PK = NOTE` + `begins_with(SK, "NOTE#")`
+- Get/update/delete uses the full key: `PK = NOTE`, `SK = NOTE#<noteId>`
+
+---
+
+## Repo structure
+
+```text
 02-notes-api/
   src/
     handlers/
