@@ -1,6 +1,5 @@
-# Lab-03 | README
-#DevAssociateLab
-___
+# Lab-03 | **README**
+
 # Lab 03 — Portfolio Shell (S3 + CloudFront + Route 53 + ACM)
 
 A TypeScript (Vite + React) portfolio shell deployed to a **private S3 origin** served through **CloudFront (HTTPS)** with an optional **custom domain** via **Route 53 + ACM (us-east-1)**.
