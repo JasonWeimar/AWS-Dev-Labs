@@ -5,12 +5,35 @@ ___
 
 A TypeScript (Vite + React) portfolio shell deployed to a **private S3 origin** served through **CloudFront (HTTPS)** with an optional **custom domain** via **Route 53 + ACM (us-east-1)**.
 
-## What this lab demonstrates
-- Static site build pipeline (TypeScript → `dist/`) and repeatable deploy loop (build → sync → invalidate)
-- CloudFront + private S3 origin using **Origin Access Control (OAC)**
-- HTTPS/TLS with ACM (CloudFront certs must be in **us-east-1**)
-- DNS routing with Route 53 (root + www to CloudFront)
-- SPA deep-link support via CloudFront error responses (403/404 → `/index.html` → 200)
+## What this Lab demonstrates
+
+**Engineering behaviors**
+
+* Secure static hosting pattern: **private S3 origin** served only through CloudFront (no public bucket)
+
+* Repeatable deploy workflow: **build → sync → invalidate** (artifact-driven releases)
+
+* Cache awareness + correctness: understanding **Hit/Miss**, TTL behavior, and invalidations
+
+* SPA deep-link reliability: CloudFront error responses (**403/404 → `/index.html`→ 200**) so refreshes don’t break routes
+
+* Domain + TLS hygiene: SNI-based HTTPS with ACM and correct hostname coverage (root + `www`)
+
+* Evidence-first verification: curl headers (`via`, `x-cache`, `x-amz-cf-*`) + console screenshots to prove behavior
+
+* Cost-control mindset: “hibernate” strategy by disabling/deleting the public entry (CloudFront) while keeping artifacts
+
+**Core AWS services**
+
+* S3 (private origin bucket for static assets)
+
+* CloudFront (CDN, HTTPS, caching, origin access control)
+
+* ACM (public TLS certificate — CloudFront requires **us-east-1**)
+
+* Route 53 (DNS routing for apex + `www` to CloudFront)
+
+
 
 ## Architecture (at a glance)
 **Flow:** Browser → CloudFront → S3 (private origin)
@@ -63,7 +86,7 @@ ___
 All screenshots live in: `docs/screenshots/`
 
 **01) CLI identity baseline (profile + caller identity)**
-![CLI GetCallerIdentity](docs/screenshots/01-cli-getcalleridentity.png)
+![CLI GetCallerIdentity](docs/screenshots/01-cli-aws-config-calleridentity.png)
 
 **02) Vite TS app running locally (proof of TS baseline)**
 ![Vite Dev Server](docs/screenshots/02-vite-dev-server.png)
