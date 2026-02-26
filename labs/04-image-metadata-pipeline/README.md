@@ -1,4 +1,4 @@
-# Lab-04 | **~README~**
+# Lab-04 | **README**
 
 ___
 # Lab 04 — S3 → Lambda → DynamoDB (Image Metadata Pipeline)
