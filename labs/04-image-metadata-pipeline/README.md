@@ -65,7 +65,7 @@ This lab builds an **event-driven serverless ingestion pipeline**: when an image
 
 ## DynamoDB data model (single-table pattern)
 
-We store one item per object version (ETag):
+Store one item per object version (ETag):
 
 * **PK:** `IMG#<bucket>#<key>`
 
@@ -268,6 +268,6 @@ All screenshots live in: `docs/screenshots/`
 
 * **DynamoDB:** delete table (easy recreate)
 
-* **Lambda + IAM:** keep if you want reuse, or delete to fully clean
+* **Lambda + IAM:** keep if wanting to reuse - or delete to fully clean
 
 * **CloudWatch Log Group:** optional (tiny cost)
