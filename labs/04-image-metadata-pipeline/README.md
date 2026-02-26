@@ -13,9 +13,7 @@ This lab builds an **event-driven serverless ingestion pipeline**: when an image
 
 **Flow:** Upload → S3 → (ObjectCreated event) → Lambda (TS) → DynamoDB
 
-```
-Local file upload (aws s3 cp)  └── S3 Bucket (private; uploads/ prefix)        └── S3 Event Notification (ObjectCreated:* filtered to uploads/)              └── Lambda (Node 20, TypeScript -> dist/)                    ├── S3 HeadObject (metadata)  [IAM: s3:GetObject]                    └── DynamoDB PutItem (conditional) [IAM: dynamodb:PutItem]                          └── CloudWatch Logs (proof + debugging)
-```
+![Architecture-at-a-glance](./docs/architecture/architecture-at-a-glance.png)
 
 ---
 
@@ -122,7 +120,19 @@ Invoker permissions live on the **Lambda resource policy**, not the Lambda execu
 ## Repo structure
 
 ```
-04-image-metadata-pipeline/  dist/  src/    handlers/    lib/  infra/  scripts/  docs/    images/    screenshots/  package.json  tsconfig.json
+04-image-metadata-pipeline/
+  dist/  
+  src/
+      handlers/    
+      lib/
+  infra/  
+  scripts/  
+  docs/
+      images/    
+      screenshots/
+  package.json  
+  tsconfig.json
+
 ```
 
 ---
@@ -144,7 +154,9 @@ zip -r /tmp/lab04-lambda.zip dist node_modules package.json
 ### Create/update Lambda (example)
 
 ```
-aws lambda create-function ...        # first timeaws lambda update-function-code ...   # updates
+aws lambda create-function ...        # first time
+aws lambda update-function-code ...   # updates
+
 ```
 
 ---
@@ -154,34 +166,69 @@ aws lambda create-function ...        # first timeaws lambda update-function-cod
 All screenshots live in: `docs/screenshots/`
 
 **01) CLI identity baseline (profile + caller identity)**
+
+![CLI GetCallerIdentity](./docs/screenshots/01-cli-getcalleridentity.png)
+
 **02) TypeScript build baseline (dist/ artifact proves TS → JS pipeline)**
+
+![TS Build Baseline](./docs/screenshots/02-ts-build-baseline.png)
 
 **03) DynamoDB table created (PK/SK + on-demand billing)**
 
+![DynamoDB Table Created](./docs/screenshots/03-dynamodb-table-created.png)
+
 **04) S3 bucket created (uploads bucket exists)**
+
+![S3 Bucket Created](./docs/screenshots/04-s3-bucket-created.png)
 
 **05) S3 Block Public Access enabled (bucket is private)**
 
+![S3 Public Access Block](./docs/screenshots/05-s3-public-access-block.png)
+
 **05b) S3 default encryption enabled (SSE-S3 / AES256)**
+
+![S3 Default Encryption](./docs/screenshots/05b-s3-default-encryption.png)
+
 
 **06) Lambda runtime + handler (proof of correct entrypoint)**
 
+![Lambda Runtime Handler](./docs/screenshots/06-lambda-runtime-handler.png)
+
 **06b) Lambda execution role (role attached to function)**
+
+![Lambda Execution Role](./docs/screenshots/06b-lambda-execution-role.png)
 
 **07) IAM policy scoping (DDB PutItem + S3 GetObject + logs)**
 
+![IAM Policy Scoping](./docs/screenshots/07-iam-policy-scoping.png)
+
 **08) CloudWatch logs proof (Lambda processed S3 event + wrote PK/SK)**
+
+![CloudWatch Logs](./docs/screenshots/08-cloudwatch-logs.png)
+
 **09) S3 event notification configured (ObjectCreated filtered to uploads/)**
+
+![S3 Event Notification](./docs/screenshots/09-s3-event-notification.png)
 
 **10) Lambda resource-based policy allows S3 invoke (add-permission proof)**
 
+![Lambda Resource Policy](./docs/screenshots/10-lambda-resource-policy-s3-invoke.png)
+
 **11) Upload test image (CLI proof of event creation)**
+
+![Upload Test Image](./docs/screenshots/11-upload-test-image.png)
 
 **12) CloudWatch log stream proof (bucket/key processed)**
 
+![CloudWatch Log Proof](./docs/screenshots/12-cloudwatch-log-proof.png)
+
 **13) DynamoDB item proof (get-item shows stored metadata)**
 
+![DynamoDB Item Proof](./docs/screenshots/13-dynamodb-item-proof.png)
+
 **14) Idempotency proof (duplicate upload safely rejected via conditional write)**
+
+![Idempotency Proof](./docs/screenshots/14-idempotency-proof-test.png)
 
 ---
 
