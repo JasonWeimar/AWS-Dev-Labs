@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // JS language features in emitted output (Node 20 handles this fine)
+    "lib": [
+      "ES2022"
+    ], // Type definitions for standard JS globals
+    "module": "ES2022", // Emit ESM-style imports/exports (matches "type": "module")
+    "moduleResolution": "Bundler", // Modern resolution that plays nicely with ESM packages
+    "outDir": "dist", // Where compiled JS ends up (deployable artifact)
+    "rootDir": "src", // Where TS source lives
+    "strict": true, // Catch mistakes early (this is your TS “level-up” mode)
+    "esModuleInterop": true, // Smooths import compatibility across packages
+    "forceConsistentCasingInFileNames": true, // Avoid case-sensitivity bugs across systems
+    "skipLibCheck": true, // Speeds up builds (fine for labs)
+    "types": [
+      "node"
+    ] // Enables Node globals/types (process, Buffer, etc.)
+  },
+  "include": [
+    "src/**/*.ts"
+  ] // Only compile project source
+}
