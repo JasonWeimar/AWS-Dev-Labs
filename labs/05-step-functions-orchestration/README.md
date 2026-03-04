@@ -110,97 +110,97 @@ ___
 
 All screenshots live in: `docs/screenshots/`
 
-**01) CLI identity baseline (profile + caller identity)**
+## **01) CLI identity baseline (profile + caller identity)**
 
 ![CLI GetCallerIdentity](./docs/screenshots/01-cli-getcalleridentity.png)
 
 
-**02) Lambda execution role trust relationship (lambda.amazonaws.com can assume role)**
+## **02) Lambda execution role trust relationship (lambda.amazonaws.com can assume role)**
 
 ![Lambda Role Trust](./docs/screenshots/02-lambda-execution-role-trust-relationship.png)
 
 
-**03) Lambda execution role permissions attached (basic logging permissions)**
+## **03) Lambda execution role permissions attached (basic logging permissions)**
 
 ![Lambda Role Permissions](./docs/screenshots/03-lambda-execution-role-permissions-attached.png)
 
 
-**04) Step Functions execution role trust relationship (states.amazonaws.com can assume role)**
+## **04) Step Functions execution role trust relationship (states.amazonaws.com can assume role)**
 
 ![SFN Role Trust](./docs/screenshots/04-step-functions-execution-role-trust-relationship.png)
 
 
-**05) Step Functions invoke policy JSON (InvokeFunction scoped to lab Lambdas)**
+## **05) Step Functions invoke policy JSON (InvokeFunction scoped to lab Lambdas)**
 
 ![SFN Invoke Policy JSON](./docs/screenshots/05-step-functions-invoke-policy-json.png)
 
 
-**06) Step Functions role permissions attached (invoke policy attached to SFN role)**
+## **06) Step Functions role permissions attached (invoke policy attached to SFN role)**
 
 ![SFN Role Permissions](./docs/screenshots/06-step-functions-role-permissions-attached.png)
 
 
-**07) Lambda functions list (3 lab functions exist)**
+## **07) Lambda functions list (3 lab functions exist)**
 
 ![Lambda Functions List](./docs/screenshots/07-lambda-functions-list.png)
 
 
-**08) ValidateInput runtime + handler (entrypoint proof)**
+## **08) ValidateInput runtime + handler (entrypoint proof)**
 
 ![ValidateInput Runtime](./docs/screenshots/08-validateinput-handler-runtime.png)
 
 
-**08b) ValidateInput execution role (role attached to function)**
+## **08b) ValidateInput execution role (role attached to function)**
 
 ![ValidateInput Role](./docs/screenshots/08b-validateinput-handler-role.png)
 
 
-**09) ProcessItem runtime + handler (entrypoint proof)**
+## **09) ProcessItem runtime + handler (entrypoint proof)**
 
 ![ProcessItem Runtime](./docs/screenshots/09-processitem-handler-runtime.png)
 
 
-**09b) ProcessItem execution role (role attached to function)**
+## **09b) ProcessItem execution role (role attached to function)**
 
 ![ProcessItem Role](./docs/screenshots/09b-processitem-handler-role.png)
 
 
-**10) CLI invoke ProcessItem OK (happy-path behavior)**
+## **10) CLI invoke ProcessItem OK (happy-path behavior)**
 
 ![CLI Invoke Process OK](./docs/screenshots/10-cli-invoke-process-ok.png)
 
 
-**10b) CLI invoke ProcessItem forced failure (TransientError for Retry/Catch proof)**
+## **10b) CLI invoke ProcessItem forced failure (TransientError for Retry/Catch proof)**
 
 ![CLI Invoke Process Fail TransientError](./docs/screenshots/10b-cli-invoke-process-fail-transienterror.png)
 
 
-**11) State machine graph (Validate → Process + Catch → RecordFailure)**
+## **11) State machine graph (Validate → Process + Catch → RecordFailure)**
 
 ![SFN State Machine Graph](./docs/screenshots/11-sfn-state-machine-graph.png)
 
 
-**12) State machine role binding proof (SFN execution role attached)**
+## **12) State machine role binding proof (SFN execution role attached)**
 
 ![SFN Role Binding Proof](./docs/screenshots/12-sfn-role-binding-proof.png)
 
 
-**13) Fail execution graph (Retry + Catch path visual proof)**
+## **13) Fail execution graph (Retry + Catch path visual proof)**
 
 ![SFN Fail Exec Graph Retry Catch](./docs/screenshots/13-sfn-exec-fail-graph-retry-catch.png)
 
 
-**14) CLI execution history proof (TaskFailed TransientError repeated = retries + final failure)**
+## **14) CLI execution history proof (TaskFailed TransientError repeated = retries + final failure)**
 
 ![CLI Exec History TaskFailed TransientError](./docs/screenshots/14-cli-exec-history-taskfailed-transienterror.png)
 
 
-**15) OK execution graph (end-to-end success path proof)**
+## **15) OK execution graph (end-to-end success path proof)**
 
 ![SFN OK Exec Graph](./docs/screenshots/15-sfn-exec-ok-graph.png)
 
 
-**16) Fail execution output (execution SUCCEEDED with stable FAILED result)**
+## **16) Fail execution output (execution SUCCEEDED with stable FAILED result)**
 
 ![SFN Fail Exec Output](./docs/screenshots/16-sfn-exec-fail-output.png)
 
