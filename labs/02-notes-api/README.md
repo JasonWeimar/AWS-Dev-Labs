@@ -1,4 +1,7 @@
-Lab 02 — Notes API (API Gateway HTTP API + Lambda + DynamoDB)
+# Lab-02 | **README**
+
+
+# Lab 02 — Notes API (API Gateway HTTP API + Lambda + DynamoDB)
 
 A serverless CRUD backend that exposes a small Notes API through **API Gateway (HTTP API)**, runs business logic in **AWS Lambda (Node.js 20)**, and persists data in **DynamoDB** using a simple **PK/SK single-table pattern** with safe conditional writes.
 

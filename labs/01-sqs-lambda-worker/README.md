@@ -1,5 +1,5 @@
 # Lab-01 | **README**
-#DevAssociateLab
+
 ___
 # Lab 01 — SQS → Lambda Worker (Retries, DLQ, Partial Batch Failures)
 
