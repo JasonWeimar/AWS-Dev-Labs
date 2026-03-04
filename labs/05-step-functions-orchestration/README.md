@@ -68,8 +68,7 @@ ___
 ___
 ## **Repo structure**
 
-![](image.png)<!-- {"width":336} -->
-
+![Repo Structure](./docs/screenshots/repo-structure.png)
 ___
 
 ## **Build + deploy (CLI-first pattern)**
