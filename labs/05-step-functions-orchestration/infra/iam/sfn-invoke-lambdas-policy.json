@@ -1,0 +1,13 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "InvokeOnlyLab05Lambdas",
+    "Effect": "Allow",
+    "Action": "lambda:InvokeFunction",
+    "Resource": [
+      "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-validateInput",
+      "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-processItem",
+      "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-recordFailure"
+    ]
+  }]
+}

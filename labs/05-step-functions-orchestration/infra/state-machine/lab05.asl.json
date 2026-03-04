@@ -1,0 +1,75 @@
+{
+  "Comment": "Lab 05 - Step Functions Orchestration Mini",
+  "StartAt": "ValidateInput",
+  "States": {
+    "ValidateInput": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-validateInput",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "ProcessItem"
+    },
+
+    "ProcessItem": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-processItem",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "TransientError",
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "BackoffRate": 2.0,
+          "MaxAttempts": 3
+        }
+      ],
+
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.caught",
+          "Next": "RecordFailure"
+        }
+      ],
+
+      "Next": "Success"
+    },
+
+    "RecordFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-west-1:148761680757:function:05-step-functions-orchestration-recordFailure",
+        "Payload": {
+          "requestId.$": "$.requestId",
+          "itemId.$": "$.itemId",
+          "Error.$": "$.caught.Error",
+          "Cause.$": "$.caught.Cause"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "FailureComplete"
+    },
+
+    "Success": {
+      "Type": "Succeed"
+    },
+
+    "FailureComplete": {
+      "Type": "Succeed"
+    }
+  }
+}

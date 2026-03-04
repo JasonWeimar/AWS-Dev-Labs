@@ -1,0 +1,112 @@
+{
+    // Human note only (does not affect execution). Nice for readers/reviewers.
+    "Comment": "Lab 05 - Step Functions Orchestration Mini",
+    // Entry point: first state name Step Functions will execute.
+    "StartAt": "ValidateInput",
+    // All states are defined here as a map of: StateName -> StateDefinition
+    "States": {
+        "ValidateInput": {
+            // "Task" means "do work" (call an integration like Lambda, DynamoDB, SNS, etc.)
+            "Type": "Task",
+            // Optimized Step Functions integration for Lambda.
+            // This returns a wrapper object containing { Payload, ExecutedVersion, ...metadata }
+            "Resource": "arn:aws:states:::lambda:invoke",
+            // Parameters control what is sent to Lambda.
+            "Parameters": {
+                // The specific Lambda function to invoke (inject the ARN via env var at file creation time).
+                "FunctionName": "${VALIDATE_ARN}",
+                // JSONPath: "$" means "the entire current state input".
+                // So we pass the whole workflow input into ValidateInput as the Lambda event.
+                "Payload.$": "$"
+            },
+            // Because lambda:invoke returns a wrapper (with .Payload), we strip it so downstream states
+            // receive only the handler's returned object (not SFN/Lambda metadata).
+            "OutputPath": "$.Payload",
+            // After ValidateInput succeeds, proceed to ProcessItem.
+            "Next": "ProcessItem"
+        },
+        "ProcessItem": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+                // Invoke the "work" Lambda
+                "FunctionName": "${PROCESS_ARN}",
+                // Pass along the *current* state data (which is now the normalized output from ValidateInput)
+                // because ValidateInput used OutputPath "$.Payload".
+                "Payload.$": "$"
+            },
+            // Same wrapper stripping: keep the state data clean for the next step.
+            "OutputPath": "$.Payload",
+            // Retry policy: only triggers when the error name matches one of these strings.
+            // IMPORTANT: the code throws TransientError with name "TransientError" to match this.
+            "Retry": [
+                {
+                    // These are the error names Step Functions will retry for.
+                    // - "TransientError" is the intentional/demo retryable failure
+                    // - Lambda.* are common transient/service throttling categories
+                    "ErrorEquals": [
+                        "TransientError",
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                    ],
+                    // Wait 2 seconds before the first retry
+                    "IntervalSeconds": 2,
+                    // Exponential backoff multiplier: 2s, then 4s, then 8s...
+                    "BackoffRate": 2.0,
+                    // Total attempts including the first try:
+                    // 3 means: initial attempt + up to 2 retries
+                    "MaxAttempts": 3
+                }
+            ],
+            // Catch: if retries don't resolve it (or a non-retryable error occurs),
+            // handle it instead of failing the entire execution.
+            "Catch": [
+                {
+                    // Catch everything (any error type)
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    // Store the error object onto the running state data at "$.caught"
+                    // Structure looks like: { "Error": "...", "Cause": "..." }
+                    "ResultPath": "$.caught",
+                    // Route to the failure handler Lambda
+                    "Next": "RecordFailure"
+                }
+            ],
+            // If ProcessItem ultimately succeeds (no error), end with Success.
+            "Next": "Success"
+        },
+        "RecordFailure": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+                // Invoke the failure handler Lambda
+                "FunctionName": "${FAIL_ARN}",
+                // Here we build a NEW payload object for the failure handler.
+                // This keeps the failure handler contract stable and intentional.
+                "Payload": {
+                    // Pull original identifiers from the (current) state data:
+                    "requestId.$": "$.requestId",
+                    "itemId.$": "$.itemId",
+                    // Pull error info that Catch stored at "$.caught":
+                    "Error.$": "$.caught.Error",
+                    "Cause.$": "$.caught.Cause"
+                }
+            },
+            // Again: strip Lambda invoke wrapper, leaving only the handler return value.
+            "OutputPath": "$.Payload",
+            // This lab treats failure-handled as a "successful completion" of the workflow path.
+            "Next": "FailureComplete"
+        },
+        "Success": {
+            // A terminal success state: execution ends successfully here.
+            "Type": "Succeed"
+        },
+        "FailureComplete": {
+            // Also terminal success: successfully handled the error and produced a stable FAILED result.
+            "Type": "Succeed"
+        }
+    }
+}
