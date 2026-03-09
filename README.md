@@ -1,4 +1,3 @@
-**Live:** https://jasonweimarstack1.com  
 **Repo:** https://github.com/JasonWeimar/AWS-Dev-Labs/tree/main/labs  
 **Contact:** [Email](mailto:jasoncweimar@gmail.com.com) | [LinkedIn](https://www.linkedin.com/in/jason-weimar-3b6592228/)
 
