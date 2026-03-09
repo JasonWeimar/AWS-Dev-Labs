@@ -1,4 +1,8 @@
-# AWS-Dev-Labs — Evidence-First DVA-C02 Lab Dojo
+**Live:** https://jasonweimarstack1.com  
+**Repo:** https://github.com/JasonWeimar/AWS-Dev-Labs/tree/main/labs  
+**Contact:** [Email](mailto:jasoncweimar@gmail.com.com) | [LinkedIn](https://www.linkedin.com/in/jason-weimar-3b6592228/)
+
+# AWS-Dev-Labs — Evidence-First AWS Lab Demos
 
 I’m a cloud-focused builder with an enterprise IT foundation and a front-end lean. This repo is my evidence-first AWS lab series: each lab is designed to be **easy to verify** (clear commands, clean infra, predictable behavior) and **easy to discuss** in interviews (why it exists, what it proves, what tradeoffs were made).
 
