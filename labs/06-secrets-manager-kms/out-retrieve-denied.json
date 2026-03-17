@@ -1,0 +1,1 @@
+{"errorType":"SecretRetrievalError","errorMessage":"Failed to retrieve secret: Access to KMS is not allowed","trace":["SecretRetrievalError: Failed to retrieve secret: Access to KMS is not allowed","    at Runtime.handler (/var/task/handlers/retrieveSecret.js:33:15)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"]}

@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowOnlyLambdaExecRole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::148761680757:role/lab06-secrets-kms-lambda-exec"
+      },
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "*"
+    }
+  ]
+}

@@ -18,3 +18,13 @@
 # Node
 node_modules/
 **/node_modules/
+
+cat > .gitignore << 'EOF'
+# Environment files — never commit
+.env.lab06
+
+# Build artifacts
+dist/
+lambda.zip
+node_modules/
+EOF
